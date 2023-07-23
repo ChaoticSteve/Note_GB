@@ -2,7 +2,7 @@ from datetime import datetime
 import json
 class NoteService():
     def __init__(self):
-        self.notes = {}
+        self.notes = {'freeID':[]}
         self.getNotes()
         self.id = self.countID()
     def getNotes(self):
@@ -15,7 +15,17 @@ class NoteService():
         with open('notes_data,json', 'w', encoding='utf-8') as f:
             json.dump(self.notes, f, sort_keys=True, ensure_ascii=False)
     def delNote(self):
-        pass
+        year = input('Введите год заметки: ')
+        month = input('Введите месяц заметки: ')
+        day = input('Введите день заметки: ')
+        key = year + '-' + month + '-' + day
+        title = self.getNote(key)
+        if title:
+            self.notes['freeID'].append(self.notes[key][title]['id'] - 1)
+            self.notes['freeID'].sort()
+            del self.notes[key][title]
+            print('Заметка удалена')
+            self.saveNotes()
     def addNote(self):
         note_title = input('Заголовок заметки: ')
         note_txt = input('Тело заметки: ')
@@ -31,10 +41,16 @@ class NoteService():
         month = input('Введите месяц заметки: ')
         day = input('Введите день заметки: ')
         key = year + '-' + month + '-' + day
+        date = str(datetime.now())[:10]
         title = self.getNote(key)
         if title:
             text = input('Введите текст:\n')
-            self.notes[key][title]['text'] += ' ' + text
+            if date == key:
+                self.notes[key][title]['text'] += ' ' + text
+            else:
+                self.notes[date][title] = self.notes[key][title]
+                self.notes[date][title]['text'] += ' ' + text
+                del self.notes[key][title]
             self.saveNotes()
     def getNote(self, key):
         key = key
@@ -47,6 +63,8 @@ class NoteService():
             print('Данной заметки нет')
             return False
     def countID(self):
+        if len(self.notes['freeID']):
+            return self.notes['freeID'].pop(0)
         count = 0
         for key in self.notes:
             count += len(self.notes[key])
@@ -56,6 +74,8 @@ class NoteService():
 #print(str(datetime.now())[:10])
 if __name__ == '__main__':
     ns = NoteService()
-    #ns.addNote()
-    ns.editNote()
+    ns.addNote()
+    #ns.editNote()
+    #ns.delNote()
+
 
