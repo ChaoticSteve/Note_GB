@@ -1,6 +1,7 @@
 from core import NoteService
 
 def getKey():
+    ns.getAllDates()
     year = input('Введите год заметки: ')
     month = input('Введите месяц заметки: ')
     day = input('Введите день заметки: ')
@@ -28,7 +29,7 @@ if __name__ == '__main__':
         elif choose == '4':
             key = getKey()
             ns.delNote(key)
-        elif key == '0':
+        elif choose == '0':
             print('До свидания')
             run = False
         else:
