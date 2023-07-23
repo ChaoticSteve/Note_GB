@@ -14,11 +14,8 @@ class NoteService():
     def saveNotes(self):
         with open('notes_data,json', 'w', encoding='utf-8') as f:
             json.dump(self.notes, f, sort_keys=True, ensure_ascii=False)
-    def delNote(self):
-        year = input('Введите год заметки: ')
-        month = input('Введите месяц заметки: ')
-        day = input('Введите день заметки: ')
-        key = year + '-' + month + '-' + day
+    def delNote(self, key):
+        key = key
         title = self.getNote(key)
         if title:
             self.notes['freeID'].append(self.notes[key][title]['id'] - 1)
@@ -35,12 +32,10 @@ class NoteService():
             self.notes[note_date] = {note_title :{'id' : self.id, 'text' : note_txt}}
         else:
             self.notes[note_date][note_title] = {'id' : self.id, 'text' : note_txt}
+        print('Заметка создана')
         self.saveNotes()
-    def editNote(self):
-        year = input('Введите год заметки: ')
-        month = input('Введите месяц заметки: ')
-        day = input('Введите день заметки: ')
-        key = year + '-' + month + '-' + day
+    def editNote(self, key):
+        key = key
         date = str(datetime.now())[:10]
         title = self.getNote(key)
         if title:
