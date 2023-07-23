@@ -27,7 +27,25 @@ class NoteService():
             self.notes[note_date][note_title] = {'id' : self.id, 'text' : note_txt}
         self.saveNotes()
     def editNote(self):
-        pass
+        year = input('Введите год заметки: ')
+        month = input('Введите месяц заметки: ')
+        day = input('Введите день заметки: ')
+        key = year + '-' + month + '-' + day
+        title = self.getNote(key)
+        if title:
+            text = input('Введите текст:\n')
+            self.notes[key][title]['text'] += ' ' + text
+            self.saveNotes()
+    def getNote(self, key):
+        key = key
+        try:
+            print('Доступные заметки: ', *self.notes[key].keys())
+            title = input('Введите название заметки: ')
+            print('Текущий текст заметки:\n', self.notes[key][title]['text'])
+            return title
+        except KeyError as e:
+            print('Данной заметки нет')
+            return False
     def countID(self):
         count = 0
         for key in self.notes:
@@ -38,4 +56,6 @@ class NoteService():
 #print(str(datetime.now())[:10])
 if __name__ == '__main__':
     ns = NoteService()
-    ns.addNote()
+    #ns.addNote()
+    ns.editNote()
+
